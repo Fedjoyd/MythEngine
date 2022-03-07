@@ -55,6 +55,10 @@ bool Ressources::RessourcesManager::AddScene(std::shared_ptr<Scene>& p_newScene)
 #ifdef MODE_EDITOR
 void Ressources::RessourcesManager::ShowManagerWindow(bool* p_opened)
 {
+	if (p_opened != nullptr)
+		if (!(*p_opened))
+			return;
+
 	ImGui::Begin("Ressources Manager", p_opened);
 
 	for (const std::pair<std::string, std::shared_ptr<Scene>>& currentScene : m_scenes)
@@ -75,6 +79,10 @@ void Ressources::RessourcesManager::ShowManagerWindow(bool* p_opened)
 
 void Ressources::RessourcesManager::ShowEditorWindow(bool* p_opened)
 {
+	if (p_opened != nullptr)
+		if (!(*p_opened))
+			return;
+
 	ImGui::Begin("Ressources Editor", p_opened);
 
 	static bool deleteCurrent = false;

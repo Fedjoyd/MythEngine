@@ -10,6 +10,7 @@
 #include "Core/System/ThreadPool.h"
 #include "Ressources/RessourcesManager.h"
 #include "Core/GameObjectsManager.h"
+#include "Core/System/Input.h"
 
 #include "Core/Debug/Log.h"
 #define MYTH_CURRENT_FILE "Application.cpp"
@@ -74,6 +75,7 @@ namespace Core
 			bool m_gameObjectEditorrWindow = true;
 			bool m_ressourcesManagerWindow = true;
 			bool m_ressourceEditorWindow = true;
+			bool m_inputEditorWindow = true;
 
 			bool m_run = false;
 #endif // MODE_EDITOR

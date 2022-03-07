@@ -7,11 +7,11 @@ Core::Debug::Log Core::Debug::Log::singleton;
 ImGuiTextBuffer tempTextBuffer = ImGuiTextBuffer();
 
 const char* LOG_LEVEL_char[] = {
-	"DEBUG",
-	"INFO",
+	" DEBUG ",
+	" INFO  ",
 	"WARNING",
-	"ERROR",
-	"FATAL",
+	" ERROR ",
+	" FATAL ",
 };
 
 void Core::Debug::Log::Print(const LOG_LEVEL level, const bool writeFL, const char* p_file, const unsigned p_line)
@@ -31,6 +31,10 @@ void Core::Debug::Log::Print(const LOG_LEVEL level, const bool writeFL, const ch
 #ifdef MODE_EDITOR
 void Core::Debug::Log::ShowEditorWindow(bool* p_opened)
 {
+	if (p_opened != nullptr)
+		if (!(*p_opened))
+			return;
+
 	ImGui::SetNextWindowSize(ImVec2(500, 400));
 	ImGui::Begin("Console", p_opened);
 

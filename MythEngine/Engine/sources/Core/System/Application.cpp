@@ -12,6 +12,10 @@ Core::System::Application Core::System::Application::singleton = Core::System::A
 #ifdef MODE_EDITOR
 void Core::System::Application::ShowSettingsWindow(bool* p_opened)
 {
+    if (p_opened != nullptr)
+        if (!(*p_opened))
+            return;
+
     ImGui::Begin("Settings", p_opened);
     ImGui::End();
 }
@@ -64,6 +68,8 @@ bool Core::System::Application::Initialize(int p_width, int p_height, const std:
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(singleton.m_glfwWindow, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
+
+    Core::System::SetKeyCallback(singleton.m_glfwWindow);
 #endif // EDITOR_MODE
 
     singleton.m_threadPool.Initialise();
@@ -97,7 +103,7 @@ void Core::System::Application::UpdateAndDraw()
 
     // Poll for and process events
     glfwPollEvents();
-
+    System::Input::GetInstance().Update(singleton.m_glfwWindow);
     System::Time::GetInstance().Update();
 
 #ifdef MODE_EDITOR
@@ -179,6 +185,7 @@ void Core::System::Application::UpdateAndDraw()
                 if (ImGui::MenuItem("GameObject Editor", NULL, &(singleton.m_gameObjectEditorrWindow))) {}
                 if (ImGui::MenuItem("Ressources Manager", NULL, &(singleton.m_ressourcesManagerWindow))) {}
                 if (ImGui::MenuItem("Ressources Editor", NULL, &(singleton.m_ressourceEditorWindow))) {}
+                if (ImGui::MenuItem("Input Editor", NULL, &(singleton.m_inputEditorWindow))) {}
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Run"))
@@ -190,16 +197,18 @@ void Core::System::Application::UpdateAndDraw()
             ImGui::EndMainMenuBar();
         }
 
-        if (singleton.m_demoImGuiWindow)         ImGui::ShowDemoWindow(&singleton.m_demoImGuiWindow);
-        if (singleton.m_settingsWindow)          singleton.ShowSettingsWindow(&singleton.m_settingsWindow);
+        if (singleton.m_demoImGuiWindow) ImGui::ShowDemoWindow(&singleton.m_demoImGuiWindow);
 
-        if (singleton.m_gameObjectManagerWindow) singleton.m_gameObjectManager.ShowManagerWindow(&singleton.m_gameObjectManagerWindow);
-        if (singleton.m_gameObjectEditorrWindow) singleton.m_gameObjectManager.ShowEditorWindow(&singleton.m_gameObjectEditorrWindow);
+        singleton.ShowSettingsWindow(&singleton.m_settingsWindow);
+        Input::GetInstance().ShowEditorWindow(&singleton.m_inputEditorWindow);
 
-        if (singleton.m_ressourcesManagerWindow) singleton.m_ressourcesManager.ShowManagerWindow(&singleton.m_ressourcesManagerWindow);
-        if (singleton.m_ressourceEditorWindow)   singleton.m_ressourcesManager.ShowEditorWindow(&singleton.m_ressourceEditorWindow);
+        singleton.m_gameObjectManager.ShowManagerWindow(&singleton.m_gameObjectManagerWindow);
+        singleton.m_gameObjectManager.ShowEditorWindow(&singleton.m_gameObjectEditorrWindow);
 
-        if (singleton.m_consoleWindow)           Debug::Log::GetInstance().ShowEditorWindow(&singleton.m_consoleWindow);
+        singleton.m_ressourcesManager.ShowManagerWindow(&singleton.m_ressourcesManagerWindow);
+        singleton.m_ressourcesManager.ShowEditorWindow(&singleton.m_ressourceEditorWindow);
+
+        Debug::Log::GetInstance().ShowEditorWindow(&singleton.m_consoleWindow);
 
         ImGui::End();
 

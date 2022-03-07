@@ -55,6 +55,10 @@ void Core::GameObjectManager::EditorUpdate()
 
 void Core::GameObjectManager::ShowManagerWindow(bool* p_opened)
 {
+	if (p_opened != nullptr)
+		if (!(*p_opened))
+			return;
+
 	ImGui::Begin("GameObject Manager", p_opened);
 
 	for (unsigned int i = 0; i < m_gameObjects.size(); i++)
@@ -68,6 +72,10 @@ void Core::GameObjectManager::ShowManagerWindow(bool* p_opened)
 
 void Core::GameObjectManager::ShowEditorWindow(bool* p_opened)
 {
+	if (p_opened != nullptr)
+		if (!(*p_opened))
+			return;
+
 	ImGui::Begin("GameObject Editor", p_opened);
 
 	if (m_selectedGameObject < m_gameObjects.size())
