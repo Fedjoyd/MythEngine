@@ -68,7 +68,7 @@ namespace Core
 			std::string m_nextSceneName;
 
 #ifdef MODE_EDITOR
-			bool m_demoImGuiWindow = true;
+			bool m_demoImGuiWindow = false;
 			bool m_settingsWindow = true;
 			bool m_consoleWindow = true;
 			bool m_gameObjectManagerWindow = true;

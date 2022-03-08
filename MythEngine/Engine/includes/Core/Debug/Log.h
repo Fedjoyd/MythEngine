@@ -83,6 +83,7 @@ namespace Core
 			void Clear();
 
 			void SetLogger(ILogger* p_logger = nullptr) { m_externalLogger = p_logger; }
+			void SetShowLevel(const LOG_LEVEL level, bool p_show = true) { LOG_LEVEL_show[(unsigned int)level] = p_show; }
 
 		private:
 			static Log singleton;
@@ -98,6 +99,8 @@ namespace Core
 			bool m_scrollToBottom;
 #endif // MODE_EDITOR
 			std::atomic_flag m_writting = ATOMIC_FLAG_INIT;
+
+			bool LOG_LEVEL_show[5] = { true, true, true, true, true };
 		};
 	}
 }

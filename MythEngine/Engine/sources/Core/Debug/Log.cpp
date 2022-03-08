@@ -16,6 +16,12 @@ const char* LOG_LEVEL_char[] = {
 
 void Core::Debug::Log::Print(const LOG_LEVEL level, const bool writeFL, const char* p_file, const unsigned p_line)
 {
+	if (!LOG_LEVEL_show[(unsigned int)level])
+	{
+		m_cout.str("");
+		return;
+	}
+
 	std::string fmt = "[" + std::string(LOG_LEVEL_char[(unsigned int)level]) + "]" + (writeFL ? "[" + std::string(p_file) + "][line " + std::to_string(p_line) + "]" : "") + " : " + m_cout.str() + "\n";
 	m_cout.str("");
 
@@ -39,15 +45,22 @@ void Core::Debug::Log::ShowEditorWindow(bool* p_opened)
 	ImGui::Begin("Console", p_opened);
 
 	if (ImGui::Button("Clear")) Clear();
-	/*ImGui::SameLine();
-	if (ImGui::Button("Test"))
-	{
-		Debug("test");
-		Info("test");
-		Warning("test");
-		Error("test");
-		Fatal("test");
-	}/**/
+	ImGui::SameLine();
+	if (ImGui::Button(("Debug (" + std::string(LOG_LEVEL_show[0u] ? "Y" : "N") + ")").c_str()))
+		LOG_LEVEL_show[0u] = !LOG_LEVEL_show[0u];
+	ImGui::SameLine();
+	if (ImGui::Button(("Info (" + std::string(LOG_LEVEL_show[1u] ? "Y" : "N") + ")").c_str()))
+		LOG_LEVEL_show[1u] = !LOG_LEVEL_show[1u];
+	ImGui::SameLine();
+	if (ImGui::Button(("Warning (" + std::string(LOG_LEVEL_show[2u] ? "Y" : "N") + ")").c_str()))
+		LOG_LEVEL_show[2u] = !LOG_LEVEL_show[2u];
+	ImGui::SameLine();
+	if (ImGui::Button(("Error (" + std::string(LOG_LEVEL_show[3u] ? "Y" : "N") + ")").c_str()))
+		LOG_LEVEL_show[3u] = !LOG_LEVEL_show[3u];
+	ImGui::SameLine();
+	if (ImGui::Button(("Fatal (" + std::string(LOG_LEVEL_show[4u] ? "Y" : "N") + ")").c_str()))
+		LOG_LEVEL_show[4u] = !LOG_LEVEL_show[4u];
+
 	ImGui::Separator();
 
 	ImGui::BeginChild("scrolling");
