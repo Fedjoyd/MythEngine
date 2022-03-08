@@ -1,5 +1,5 @@
 #include "ECS/Model.h"
-#include <stb_image.h>
+#include "Core/System/Application.h"
 
 #include "Core/Debug/Log.h"
 
@@ -23,7 +23,9 @@ void ECS::Model::ProcessNode(const std::string& p_nodeName, aiNode* node, const 
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		Ressources::RessourcesManager& rm = Core::System::Application::GetInstance().GetRessourcesManager();
 		m_meshes.push_back(ProcessMesh((p_nodeName + "_mesh[" + std::to_string(i) + "]"), mesh, scene));
+		rm.RegisterAndLoadRessource(m_meshes.back());
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -51,42 +53,47 @@ void ProcessVertex(Vertex& vertex, aiMesh* mesh, unsigned int indice)
 		vertex.uv = Vec2{ 0.f, 0.f };
 }
 
-Ressources::Mesh ECS::Model::ProcessMesh(const std::string& p_meshName, aiMesh* mesh, const aiScene* scene)
+Ressources::Mesh* ECS::Model::ProcessMesh(const std::string& p_meshName, aiMesh* mesh, const aiScene* scene)
 {
-	Ressources::Mesh tmp_mesh(p_meshName);
-	std::vector<Ressources::Texture> textures;
+	Ressources::Mesh* tmp_mesh = new Ressources::Mesh(p_meshName);
+	std::vector<Ressources::Texture*> textures;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
 		ProcessVertex(vertex, mesh, i);
-		tmp_mesh.m_vertices.push_back(vertex);
+		tmp_mesh->m_vertices.push_back(vertex);
 	}
 
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			tmp_mesh.m_indices.push_back(face.mIndices[j]);
+			tmp_mesh->m_indices.push_back(face.mIndices[j]);
 	}
 
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		std::vector<Ressources::Texture> diffuseMaps = LoadMaterialTextures(p_meshName, material, aiTextureType_DIFFUSE, "texture_diffuse");
+		std::vector<Ressources::Texture*> diffuseMaps;
+		LoadMaterialTextures(p_meshName, material, aiTextureType_DIFFUSE, "texture_diffuse", diffuseMaps);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-		std::vector<Ressources::Texture> specularMaps = LoadMaterialTextures(p_meshName, material, aiTextureType_SPECULAR, "texture_specular");
+		std::vector<Ressources::Texture*> specularMaps;
+		LoadMaterialTextures(p_meshName, material, aiTextureType_SPECULAR, "texture_specular", specularMaps);
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
-	m_allVertices.insert(m_allVertices.end(), tmp_mesh.m_vertices.begin(), tmp_mesh.m_vertices.end());
+	tmp_mesh->m_gpu = std::make_shared<GPUMesh>();
+	tmp_mesh->m_gpu->VertexCount = tmp_mesh->m_vertices.size();
+	tmp_mesh->m_gpu->offset = m_allVertices.size();
+	m_allVertices.insert(m_allVertices.end(), tmp_mesh->m_vertices.begin(), tmp_mesh->m_vertices.end());
 	return tmp_mesh;
 }
 
-std::vector<Ressources::Texture> ECS::Model::LoadMaterialTextures(const std::string& p_meshName, aiMaterial* mat, aiTextureType type, const std::string& typeName)
+void ECS::Model::LoadMaterialTextures(const std::string& p_meshName, aiMaterial* mat, aiTextureType type,
+									  const std::string& typeName, std::vector<Ressources::Texture*>& textures)
 {
-	std::vector<Ressources::Texture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -94,7 +101,7 @@ std::vector<Ressources::Texture> ECS::Model::LoadMaterialTextures(const std::str
 		bool skip = false;
 		for (unsigned int j = 0; j < m_loadedTextures.size(); j++)
 		{
-			if (std::strcmp(m_loadedTextures[j].m_path.data(), str.C_Str()) == 0)
+			if (std::strcmp(m_loadedTextures[j]->m_path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(m_loadedTextures[j]);
 				skip = true;
@@ -104,53 +111,21 @@ std::vector<Ressources::Texture> ECS::Model::LoadMaterialTextures(const std::str
 
 		if (!skip)
 		{
-			Ressources::Texture texture(p_meshName + "_" + typeName + "[" + std::to_string(i) + "]");
-			texture.m_gpu = new GPUTexture;
-			texture.m_gpu->data = TextureFromFile(str.C_Str(), m_directory);
-			texture.m_type = typeName;
-			texture.m_path = m_directory + '/' + std::string(str.C_Str());
+			Ressources::Texture* texture = new Ressources::Texture(p_meshName + "_" + typeName + "[" + std::to_string(i) + "]");
+			texture->m_type = typeName;
+			texture->m_path = m_directory + '/' + std::string(str.C_Str());
+			Ressources::RessourcesManager& rm = Core::System::Application::GetInstance().GetRessourcesManager();
 			textures.push_back(texture);
+			m_loadedTextures.push_back(textures.back());
+			rm.RegisterAndLoadRessource(m_loadedTextures.back());
 		}
 	}
 
-	return textures;
+	return;
 }
 
-unsigned int TextureFromFile(const char* path, const std::string& directory)
+void ECS::Model::Draw(Core::GameObject* p_gameObject)
 {
-	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
-	int width, height, nrChannels;
-	unsigned int textureID;
-
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrChannels, 0);
-
-	glGenTextures(1, &textureID);
-
-	if (data)
-	{
-		GLenum format;
-		if (nrChannels == 1)
-			format = GL_RED;
-		else if (nrChannels == 3)
-			format = GL_RGB;
-		else if (nrChannels == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-	else
-	{
-		MYTH_ERROR("Image loading failed on '%s'\n", path);
-	}
-
-	stbi_image_free(data);
-	return textureID;
+	if (m_loadedTextures.size() != 0)
+		glBindTexture(GL_TEXTURE_2D, m_loadedTextures[0]->m_gpu->data);
 }

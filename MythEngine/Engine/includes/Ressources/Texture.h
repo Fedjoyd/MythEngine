@@ -9,11 +9,15 @@ struct GPUTexture
 
 namespace Ressources
 {
-	class Texture : Ressource
+	class Texture : public Ressource
 	{
-	public :
+	public:
 		Texture(const std::string& p_name) : Ressource(p_name) {};
-		~Texture() {};
+		~Texture()
+		{
+			if (m_gpu != nullptr)
+				delete m_gpu;
+		};
 
 		std::string m_type;
 		std::string m_path;
@@ -21,7 +25,7 @@ namespace Ressources
 
 		const std::type_info& GetRessourceType() const override { return typeid(*this); };
 
-		//void LoadRessource() override;
-		//void UnloadRessource() override;
+		void LoadRessource() override;
+		void UnloadRessource() override;
 	};
 }

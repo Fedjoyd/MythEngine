@@ -18,7 +18,7 @@ struct GPUMesh
 
 namespace Ressources
 {
-	class Mesh : Ressources::Ressource
+	class Mesh : public Ressources::Ressource
 	{
 	public:
 		Mesh(const std::string& p_name) : Ressource(p_name) {};
@@ -26,7 +26,7 @@ namespace Ressources
 
 		std::vector<Vertex> m_vertices;
 		std::vector<unsigned int> m_indices;
-		GPUMesh* m_gpu = nullptr;
+		std::shared_ptr<GPUMesh> m_gpu = nullptr;
 
 		const std::type_info& GetRessourceType() const override { return typeid(*this); };
 	};

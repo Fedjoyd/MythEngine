@@ -1,5 +1,6 @@
 #include "Core/GameObjectsManager.h"
-
+#include "ECS/Model.h"
+#include "maths/Mat4x4.hpp"
 #include "imgui.h"
 
 void Core::GameObjectManager::LoadScene(std::shared_ptr<Ressources::Scene> p_newScene)
@@ -14,8 +15,28 @@ void Core::GameObjectManager::LoadScene(std::shared_ptr<Ressources::Scene> p_new
 
 void Core::GameObjectManager::Start()
 {
+	std::vector<Vertex> allVertices;
 	for (std::unique_ptr<GameObject>& currentGO : m_gameObjects)
+	{
 		currentGO->Start();
+		ECS::Model* model = currentGO->GetComponent<ECS::Model>();
+		if (model != nullptr)
+			allVertices.insert(allVertices.end(), model->m_allVertices.begin(), model->m_allVertices.end());
+	}
+
+	glGenBuffers(1, &gpu->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, gpu->VBO);
+	glBufferData(GL_ARRAY_BUFFER, allVertices.size() * sizeof(Vertex), &allVertices[0], GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &gpu->VAO);
+	glBindVertexArray(gpu->VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, gpu->VBO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 }
 
 void Core::GameObjectManager::Update()
@@ -34,8 +55,11 @@ void Core::GameObjectManager::Update()
 
 void Core::GameObjectManager::FixedUpdate()
 {
+	std::vector<Vertex> allVertices;
 	for (std::unique_ptr<GameObject>& currentGO : m_gameObjects)
+	{
 		currentGO->FixedUpdate();
+	}
 }
 
 #ifdef MODE_EDITOR
@@ -89,6 +113,27 @@ void Core::GameObjectManager::ShowEditorWindow(bool* p_opened)
 
 void Core::GameObjectManager::Draw()
 {
+	glEnable(GL_DEPTH_TEST);
+	glBindVertexArray(gpu->VAO);
+	Mat4x4 proj = Mat4x4::Perspective(Maths::DegToRad(60.f), 1200.f / 800.f, 0.1f, 100.f);
+	Mat4x4 view = Mat4x4::ViewRad(0.f, 0.f, { 0.f, 0.f, 5.f });
+	Mat4x4 viewProj = proj * view;
+	Mat4x4 mat = Mat4x4::Identity;
+
 	for (std::unique_ptr<GameObject>& currentGO : m_gameObjects)
-		currentGO->Draw();
+	{
+		ECS::Model* model = currentGO->GetComponent<ECS::Model>();
+
+		if (model == nullptr)
+			continue;
+
+		model->m_shader->use();
+		glUniformMatrix4fv(glGetUniformLocation(model->m_shader->Program, "uVP"), 1, GL_FALSE, viewProj.m_mat.data());
+		for (Ressources::Mesh* mesh : model->m_meshes)
+		{
+			glUniformMatrix4fv(glGetUniformLocation(model->m_shader->Program, "uModel"), 1, GL_FALSE, mat.m_mat.data());
+			currentGO->Draw();
+			glDrawArrays(GL_TRIANGLES, mesh->m_gpu->offset, mesh->m_gpu->VertexCount);
+		}
+	}
 }

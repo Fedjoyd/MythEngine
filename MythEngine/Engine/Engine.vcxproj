@@ -221,7 +221,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)libs\zlibstaticd.lib;$(ProjectDir)libs\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)libs\Assimp\zlibstaticd.lib;$(ProjectDir)libs\Assimp\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -238,7 +238,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)libs\zlibstaticd.lib;$(ProjectDir)libs\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)libs\Assimp\zlibstaticd.lib;$(ProjectDir)libs\Assimp\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -258,7 +258,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)libs\zlibstaticd.lib;$(ProjectDir)libs\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)libs\Assimp\zlibstatic.lib;$(ProjectDir)libs\Assimp\assimp-vc142-mt.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (Editor)|x64'">
@@ -277,7 +277,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)libs\zlibstaticd.lib;$(ProjectDir)libs\assimp-vc142-mtd.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)libs\Assimp\zlibstatic.lib;$(ProjectDir)libs\Assimp\assimp-vc142-mt.lib;$(ProjectDir)libs\vc2019\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -316,6 +316,7 @@
     <ClCompile Include="sources\Ressources\RessourcesManager.cpp" />
     <ClCompile Include="sources\Ressources\Scene.cpp" />
     <ClCompile Include="sources\Ressources\ScriptSource.cpp" />
+    <ClCompile Include="sources\Ressources\Shader.cpp" />
     <ClCompile Include="sources\Ressources\Texture.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
@@ -345,6 +346,7 @@
     <ClInclude Include="includes\Ressources\RessourcesManager.h" />
     <ClInclude Include="includes\Ressources\Scene.h" />
     <ClInclude Include="includes\Ressources\ScriptSource.h" />
+    <ClInclude Include="includes\Ressources\Shader.h" />
     <ClInclude Include="includes\Ressources\Texture.h" />
     <ClInclude Include="Test.h" />
   </ItemGroup>

@@ -23,7 +23,7 @@ void Core::System::Application::ShowSettingsWindow(bool* p_opened)
 
 bool Core::System::Application::Initialize(int p_width, int p_height, const std::string& p_name, bool p_fullscreen)
 {
-    const char* glsl_version = "#version 450";
+    const char* glsl_version = "#version 450 core";
 
     // Initialize the library
     if (!glfwInit())
@@ -126,8 +126,9 @@ void Core::System::Application::UpdateAndDraw()
 
     // Render here
     glClearColor(0.5f, 0.5f, 0.5f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    singleton.m_gameObjectManager.FixedUpdate();
     singleton.m_gameObjectManager.Draw();
 
 #ifdef MODE_EDITOR
