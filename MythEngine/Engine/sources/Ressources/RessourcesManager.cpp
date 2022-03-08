@@ -53,6 +53,8 @@ bool Ressources::RessourcesManager::AddScene(std::shared_ptr<Scene>& p_newScene)
 }
 
 #ifdef MODE_EDITOR
+#include "Core/System/Application.h"
+
 void Ressources::RessourcesManager::ShowManagerWindow(bool* p_opened)
 {
 	if (p_opened != nullptr)
@@ -63,7 +65,10 @@ void Ressources::RessourcesManager::ShowManagerWindow(bool* p_opened)
 
 	for (const std::pair<std::string, std::shared_ptr<Scene>>& currentScene : m_scenes)
 	{
-		ImGui::Text((" - " + currentScene.first).c_str());
+		ImGui::Text(" - %s", currentScene.first.c_str());
+		ImGui::SameLine();
+		if (ImGui::Button(("Load##Scene" + currentScene.first).c_str()))
+			Core::System::Application::GetInstance().QueryLoadScene(currentScene.first);
 	}
 
 	ImGui::Separator();
@@ -95,7 +100,9 @@ void Ressources::RessourcesManager::ShowEditorWindow(bool* p_opened)
 			m_selected = "";
 		else
 		{
-			ImGui::Text("Ressource : %s (use count = %ld)", m_ressources[m_selected]->GetName().c_str(), m_ressources[m_selected].use_count());
+			ImGui::Text("Ressource : %s\nuse count = %ld", m_ressources[m_selected]->GetName().c_str(), m_ressources[m_selected].use_count());
+
+			ImGui::Spacing();
 
 			if (ImGui::Button("Delete##Ressource"))
 			{
@@ -122,7 +129,7 @@ void Ressources::RessourcesManager::ShowEditorWindow(bool* p_opened)
 				if (ImGui::Button("Load##Ressource"))
 					m_ressources[m_selected]->LoadRessource();
 
-			ImGui::Spacing();
+			ImGui::Separator();
 			m_ressources[m_selected]->ShowEditorControl();
 		}
 	}

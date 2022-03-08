@@ -5,6 +5,8 @@
 #include "tinyJS/TinyJS_Functions.h"
 #include "imgui_stdlib.h"
 
+#pragma warning( disable : 4101 )
+
 ECS::ScriptInstance::ScriptInstance() :
 	Component(),
 	m_script(nullptr)
@@ -151,7 +153,7 @@ void ECS::ScriptInstance::Update(Core::GameObject* p_gameObject)
 			JScontext->execute("Update();");
 			ExtractValueFromJS(JScontext);
 		}
-		catch (CScriptException* e) { /*Core::Debug::Log::Error(e->text.c_str());/**/ }
+		catch (CScriptException* e) { /*MYTH_DEBUG(e->text.c_str());/**/ }
 
 		delete JScontext;
 	}
@@ -175,7 +177,7 @@ void ECS::ScriptInstance::FixedUpdate(Core::GameObject* p_gameObject)
 			JScontext->execute("FixedUpdate();");
 			ExtractValueFromJS(JScontext);
 		}
-		catch (CScriptException* e) { /*Core::Debug::Log::Error(e->text.c_str());/**/ }
+		catch (CScriptException* e) { /*MYTH_DEBUG(e->text.c_str());/**/ }
 
 		delete JScontext;
 	}
@@ -200,7 +202,7 @@ void ECS::ScriptInstance::EditorUpdate(Core::GameObject* p_gameObject)
 			JScontext->execute("EditorUpdate();");
 			ExtractValueFromJS(JScontext);
 		}
-		catch (CScriptException* e) { /*Core::Debug::Log::Error(e->text.c_str());/**/ }
+		catch (CScriptException* e) { /*MYTH_DEBUG(e->text.c_str());/**/ }
 
 		delete JScontext;
 	}
@@ -257,7 +259,7 @@ void ECS::ScriptInstance::Draw(Core::GameObject* p_gameObject)
 			JScontext->execute("Draw();");
 			ExtractValueFromJS(JScontext);
 		}
-		catch (CScriptException* e) { /*Core::Debug::Log::Error(e->text.c_str());/**/ }
+		catch (CScriptException* e) { /*MYTH_DEBUG(e->text.c_str());/**/ }
 
 		delete JScontext;
 	}

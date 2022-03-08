@@ -59,7 +59,7 @@ namespace Core
 		{
 			if (m_components[i]->GetComponentType() == typeid(T))
 			{
-				toReturnPtr = m_components[i].get();
+				toReturnPtr = dynamic_cast<T*>(m_components[i].get());
 
 				if (currentComponent < indexComponent)
 					currentComponent++;
@@ -94,7 +94,7 @@ namespace Core
 		for (unsigned int i = 0; i < m_components.size(); i++)
 		{
 			if (m_components[i]->GetComponentType() == typeid(T))
-				toReturnlist.push_back(m_components[i].get());
+				toReturnlist.push_back(dynamic_cast<T*>(m_components[i].get()));
 		}
 
 		return toReturnlist;

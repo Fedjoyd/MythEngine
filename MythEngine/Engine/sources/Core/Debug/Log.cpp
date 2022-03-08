@@ -215,7 +215,7 @@ void Core::Debug::Log::Error(const char* p_fmt, ...)
 	singleton.m_writting.clear();
 }
 
-void Core::Debug::Log::Error(const char* p_fmt, ...)
+void Core::Debug::Log::Fatal(const char* p_fmt, ...)
 {
 	while (singleton.m_writting.test_and_set()) {}
 

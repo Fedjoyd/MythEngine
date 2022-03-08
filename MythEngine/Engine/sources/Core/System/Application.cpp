@@ -107,7 +107,6 @@ void Core::System::Application::UpdateAndDraw()
     System::Time::GetInstance().Update();
 
 #ifdef MODE_EDITOR
-    singleton.m_gameObjectManager.EditorUpdate();
     if (singleton.m_run)
     {
         singleton.m_gameObjectManager.Update();
@@ -115,6 +114,8 @@ void Core::System::Application::UpdateAndDraw()
         if (System::Time::Fixing())
             singleton.m_gameObjectManager.FixedUpdate();
     }
+    else
+        singleton.m_gameObjectManager.EditorUpdate();
 #endif // EDITOR_MODE
 #ifndef MODE_EDITOR
     singleton.m_gameObjectManager.Update();

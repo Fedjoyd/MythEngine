@@ -3,7 +3,7 @@ viteStupeflip = 759;
 YoloSwagg = 0.7561;
 hummm = "ceci est un string ^^";
 
-function Start() {
+/*function Start() {
     print("start !!");
     print("test is : " + test);
     print("viteStupeflip is : " + viteStupeflip);
@@ -11,7 +11,7 @@ function Start() {
     print("hummm is : " + hummm);
 }/**/
 
-function Update() {
+/*function Update() {
     print("update !!");
     print("test is : " + test);
     print("viteStupeflip is : " + viteStupeflip);
@@ -20,7 +20,7 @@ function Update() {
     print("hummm is : " + hummm);
 }/**/
 
-function FixedUpdate() {
+/*function FixedUpdate() {
     print("fixed update !!");
     print("test is : " + test);
     viteStupeflip = viteStupeflip * 2;
@@ -29,7 +29,7 @@ function FixedUpdate() {
     print("hummm is : " + hummm);
 }/**/
 
-function EditorUpdate() {
+/*function EditorUpdate() {
     print("fixed update !!");
     print("test is : " + test);
     viteStupeflip = viteStupeflip * 2;
@@ -38,7 +38,7 @@ function EditorUpdate() {
     print("hummm is : " + hummm);
 }/**/
 
-function Draw() {
+/*function Draw() {
     print("draw !!");
     print("test is : " + test);
     print("viteStupeflip is : " + viteStupeflip);

@@ -1,6 +1,6 @@
 #pragma once
 
-#define MODE_EDITOR
+//#define MODE_EDITOR
 
 #include "Core/Debug/Assert.h"
 

@@ -43,6 +43,8 @@ class Quaternion
 		void SetAxis(Vec3 const&);
 
 	// Operators
+		bool        operator==  (Quaternion const& p_vector)   const;
+
 		Quaternion  operator+(Quaternion const& p_quat) const;
 		Quaternion  operator+(float const& p_value) const;
 		Quaternion& operator+=(Quaternion const& p_quat);

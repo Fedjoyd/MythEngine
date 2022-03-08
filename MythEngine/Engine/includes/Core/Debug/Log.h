@@ -8,6 +8,7 @@
 
 #include "define.h"
 
+#pragma warning( disable : 4005 )
 #define MYTH_CURRENT_FILE __FILE__
 
 #ifdef MODE_EDITOR

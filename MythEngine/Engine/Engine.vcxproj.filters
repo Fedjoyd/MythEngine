@@ -162,6 +162,9 @@
     <ClCompile Include="sources\Ressources\ScriptSource.cpp">
       <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
+    <ClCompile Include="sources\ECS\Transform.cpp">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\define.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="includes\Core\Debug\Assert.h">
       <Filter>Fichiers d%27en-tête\Core\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ECS\Transform.h">
+      <Filter>Fichiers d%27en-tête\ECS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

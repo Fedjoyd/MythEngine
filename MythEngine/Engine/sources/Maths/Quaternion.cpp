@@ -276,6 +276,11 @@ Vec3 Quaternion::Vec3RotateByQuat(Vec3 const& p_vec, Quaternion const& p_quat)
 	};
 }
 
+bool        Quaternion::operator==  (Quaternion const& p_vector)   const
+{
+	return m_i == p_vector.m_i && m_j == p_vector.m_j && m_k == p_vector.m_k && m_r == p_vector.m_r;
+}
+
 Quaternion  Quaternion::operator+(Quaternion const& p_quat) const
 {
 	return
