@@ -1,6 +1,8 @@
 #include "Core/System/Application.h"
 
+#include "Core/System/Input.h"
 #include "Core/System/Time.h"
+#include "Core/System/CameraManager.h"
 
 #ifdef MODE_EDITOR
 #include "imgui_impl_glfw.h"
@@ -70,7 +72,20 @@ bool Core::System::Application::Initialize(int p_width, int p_height, const std:
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     Core::System::SetKeyCallback(singleton.m_glfwWindow);
+
+    System::Input::GetInstance().AddKeyInput(EDITOR_INPUT_NAME, GLFW_KEY_E);
 #endif // EDITOR_MODE
+
+    System::Input::GetInstance().AddKeyInput(CAMERA_FRONT_INPUT_NAME, GLFW_KEY_W);
+    System::Input::GetInstance().AddKeyInput(CAMERA_BACK_INPUT_NAME, GLFW_KEY_S);
+    System::Input::GetInstance().AddKeyInput(CAMERA_LEFT_INPUT_NAME, GLFW_KEY_A);
+    System::Input::GetInstance().AddKeyInput(CAMERA_RIGHT_INPUT_NAME, GLFW_KEY_D);
+    System::Input::GetInstance().AddKeyInput(CAMERA_UP_INPUT_NAME, GLFW_KEY_SPACE);
+    System::Input::GetInstance().AddKeyInput(CAMERA_DOWN_INPUT_NAME, GLFW_KEY_LEFT_CONTROL);
+    System::Input::GetInstance().AddKeyInput(CAMERA_SPEED_INPUT_NAME, GLFW_KEY_LEFT_SHIFT);
+    System::Input::GetInstance().AddKeyInput(CAMERA_LOOK_INPUT_NAME, GLFW_MOUSE_BUTTON_2, true);
+
+    System::CameraManager::GetInstance().Setup(singleton.m_glfwWindow);
 
     singleton.m_threadPool.Initialise();
 
@@ -115,7 +130,9 @@ void Core::System::Application::UpdateAndDraw()
             singleton.m_gameObjectManager.FixedUpdate();
     }
     else
+    {
         singleton.m_gameObjectManager.EditorUpdate();
+    }
 #endif // EDITOR_MODE
 #ifndef MODE_EDITOR
     singleton.m_gameObjectManager.Update();
@@ -132,7 +149,10 @@ void Core::System::Application::UpdateAndDraw()
     singleton.m_gameObjectManager.Draw();
 
 #ifdef MODE_EDITOR
-    if (true)
+    if (System::Input::IsKeyPressed(EDITOR_INPUT_NAME))
+        singleton.m_editorOpen = !singleton.m_editorOpen;
+
+    if (singleton.m_editorOpen)
     {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();

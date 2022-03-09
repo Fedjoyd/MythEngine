@@ -1,10 +1,16 @@
 #include "Test.h"
 #include "ECS/Model.h"
+#include "ECS/Camera.h"
+#include "Core/System/CameraManager.h"
 
 void TestScene::RegisterGameObjects(std::vector<std::unique_ptr<Core::GameObject>>& p_GameObjectList)
 {
-    ECS::Component* currentComponent = new ECS::Model("ressources/assets/sphere.obj");
+    ECS::Component* currentComponent = new ECS::Model("ressources/assets/Sponza/sponza.obj");
     ECS::Component* newComponent = new ECS::Model("ressources/assets/cube.obj");
+    ECS::Component* newCameraBack = new ECS::Camera();
+
+    ECS::Camera* newCamera = new ECS::Camera();
+    Core::System::CameraManager::GetInstance().SetCamera(newCamera);
 
     Core::GameObject* newGameObj = new Core::GameObject("testGO");
     newGameObj->GetComponents().emplace_back(currentComponent);
@@ -12,20 +18,10 @@ void TestScene::RegisterGameObjects(std::vector<std::unique_ptr<Core::GameObject
 
     newGameObj = new Core::GameObject("testGO_2");
     newGameObj->GetComponents().emplace_back(newComponent);
+    newGameObj->GetComponents().emplace_back(newCameraBack);
     p_GameObjectList.emplace_back(newGameObj);
 
     newGameObj = new Core::GameObject("testGO_3");
-    p_GameObjectList.emplace_back(newGameObj);
-
-    newGameObj = new Core::GameObject("testGO_4");
-    p_GameObjectList.emplace_back(newGameObj);
-
-    newGameObj = new Core::GameObject("testGO_5");
-    p_GameObjectList.emplace_back(newGameObj);
-
-    newGameObj = new Core::GameObject("testGO_6");
-    p_GameObjectList.emplace_back(newGameObj);
-
-    newGameObj = new Core::GameObject("testGO_7");
+    newGameObj->GetComponents().emplace_back(newCamera);
     p_GameObjectList.emplace_back(newGameObj);
 }

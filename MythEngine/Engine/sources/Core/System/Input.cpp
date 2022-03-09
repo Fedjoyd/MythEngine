@@ -6,7 +6,12 @@
 
 Core::System::Input Core::System::Input::singleton;
 
-Core::System::Input::Input()
+Core::System::Input::Input() :
+	m_xMousePosition(0.0),
+	m_yMousePosition(0.0),
+	m_xOldMousePosition(0.0),
+	m_yOldMousePosition(0.0),
+	m_lockMouse(false)
 {
 }
 
@@ -19,6 +24,16 @@ void Core::System::Input::Update(GLFWwindow* window)
 {
 	if (window == nullptr)
 		return;
+
+	m_xOldMousePosition = m_xMousePosition;
+	m_yOldMousePosition = m_yMousePosition;
+
+	glfwGetCursorPos(window, &m_xMousePosition, &m_yMousePosition);
+
+	if (m_lockMouse)
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	int KeyStatus = 0;
 
@@ -48,6 +63,15 @@ void Core::System::Input::Update(GLFWwindow* window)
 			currentInputdata.IsDown = currentInputdata.IsDown || ((KeyStatus == GLFW_PRESS) || (KeyStatus == GLFW_REPEAT));
 		}
 	}
+}
+
+bool Core::System::Input::HasKeyInput(const std::string& p_inputName)
+{
+	for (unsigned int i = 0; i < m_keyboardMouseInput.size(); i++)
+		if (m_keyboardMouseInput[i].Name == p_inputName)
+			return true;
+
+	return false;
 }
 
 Core::System::KeyboardMouseInputData* Core::System::Input::GetKeyInput(const std::string& p_inputName)
@@ -145,6 +169,14 @@ bool Core::System::Input::IsKeyRepeated(const std::string& p_inputName)
 		return false;
 
 	return inputData->IsRepeated;
+}
+
+Vec2 Core::System::Input::GetMouseDelta()
+{
+	return Vec2(
+		(float)(singleton.m_xMousePosition - singleton.m_xOldMousePosition),
+		(float)(singleton.m_yMousePosition - singleton.m_yOldMousePosition)
+	);
 }
 
 #ifdef MODE_EDITOR

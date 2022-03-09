@@ -111,14 +111,19 @@ void Core::GameObjectManager::ShowEditorWindow(bool* p_opened)
 }
 #endif // MODE_EDITOR
 
+#include "Core/System/CameraManager.h"
+
 void Core::GameObjectManager::Draw()
 {
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(gpu->VAO);
-	Mat4x4 proj = Mat4x4::Perspective(Maths::DegToRad(60.f), 1200.f / 800.f, 0.1f, 100.f);
+	Mat4x4 proj = System::CameraManager::GetInstance().GetProjectionMatrix();
+
 	Mat4x4 view = Mat4x4::ViewRad(0.f, 0.f, { 0.f, 0.f, 5.f });
+	if (System::CameraManager::GetInstance().HasCamera())
+		view = System::CameraManager::GetInstance().GetCamera()->GetViewMatrix();
+
 	Mat4x4 viewProj = proj * view;
-	Mat4x4 mat = Mat4x4::Identity;
 
 	for (std::unique_ptr<GameObject>& currentGO : m_gameObjects)
 	{
@@ -129,11 +134,6 @@ void Core::GameObjectManager::Draw()
 
 		model->m_shader->use();
 		glUniformMatrix4fv(glGetUniformLocation(model->m_shader->Program, "uVP"), 1, GL_FALSE, viewProj.m_mat.data());
-		for (Ressources::Mesh* mesh : model->m_meshes)
-		{
-			glUniformMatrix4fv(glGetUniformLocation(model->m_shader->Program, "uModel"), 1, GL_FALSE, mat.m_mat.data());
-			currentGO->Draw();
-			glDrawArrays(GL_TRIANGLES, mesh->m_gpu->offset, mesh->m_gpu->VertexCount);
-		}
+		currentGO->Draw();
 	}
 }

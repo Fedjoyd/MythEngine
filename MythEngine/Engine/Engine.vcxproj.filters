@@ -168,6 +168,12 @@
     <ClCompile Include="sources\Ressources\Shader.cpp">
       <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
+    <ClCompile Include="sources\Core\System\CameraManager.cpp">
+      <Filter>Fichiers sources\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ECS\Camera.cpp">
+      <Filter>Fichiers sources\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\define.h">
@@ -252,6 +258,15 @@
       <Filter>Fichiers d%27en-tête\ECS</Filter>
     </ClInclude>
     <ClInclude Include="includes\Ressources\Shader.h">
+      <Filter>Fichiers d%27en-tête\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Core\System\CameraManager.h">
+      <Filter>Fichiers d%27en-tête\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ECS\Camera.h">
+      <Filter>Fichiers d%27en-tête\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Ressources\Material.h">
       <Filter>Fichiers d%27en-tête\Ressources</Filter>
     </ClInclude>
   </ItemGroup>

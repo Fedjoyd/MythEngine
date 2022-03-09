@@ -65,6 +65,7 @@ struct Maths
     static float Sqrt (float const p_value);
     static float Tan (float const p_value);
     static float TanH (float const p_value);
+    static float Mod(float Value, float Base);
     template<typename tVal>
     static tVal map_value(std::pair<tVal, tVal> a, std::pair<tVal, tVal> b, tVal inVal);
 };

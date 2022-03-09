@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "maths/Vec2.hpp"
+
 namespace Core
 {
 	namespace System
@@ -45,15 +47,21 @@ namespace Core
 			static Input& GetInstance();
 
 			void Update(GLFWwindow* window);
+			bool HasKeyInput(const std::string& p_inputName);
 			KeyboardMouseInputData* GetKeyInput(const std::string& p_inputName);
 			void AddKeyInput(const std::string& p_inputName, int p_keycode, bool p_isMouse = false);
 			void RemKeyInput(const std::string& p_inputName, int p_keycode, bool p_isMouse = false);
+			bool IsMouseLocked() const { return m_lockMouse; }
+			void SetMouseLock(const bool p_newLock = true) { m_lockMouse = p_newLock; }
 
 			static InputStatus GetKeyInputStatus(const std::string& p_inputName);
 			static bool IsKeyDown(const std::string& p_inputName);
 			static bool IsKeyPressed(const std::string& p_inputName);
 			static bool IsKeyReleased(const std::string& p_inputName);
 			static bool IsKeyRepeated(const std::string& p_inputName);
+
+			static Vec2 GetMousePosition() { return Vec2((float)singleton.m_xMousePosition, (float)singleton.m_yMousePosition); }
+			static Vec2 GetMouseDelta();
 
 #ifdef MODE_EDITOR
 			void ShowEditorWindow(bool* p_opened = nullptr);
@@ -68,6 +76,13 @@ namespace Core
 #endif // MODE_EDITOR
 
 			std::vector<KeyboardMouseInputData> m_keyboardMouseInput;
+
+			double m_xMousePosition;
+			double m_yMousePosition;
+			double m_xOldMousePosition;
+			double m_yOldMousePosition;
+
+			bool m_lockMouse;
 		};
 	}
 }

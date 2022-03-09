@@ -298,10 +298,12 @@
     <ClCompile Include="sources\Core\GameObject.cpp" />
     <ClCompile Include="sources\Core\GameObjectsManager.cpp" />
     <ClCompile Include="sources\Core\System\Application.cpp" />
+    <ClCompile Include="sources\Core\System\CameraManager.cpp" />
     <ClCompile Include="sources\Core\System\Input.cpp" />
     <ClCompile Include="sources\Core\System\Random.cpp" />
     <ClCompile Include="sources\Core\System\ThreadPool.cpp" />
     <ClCompile Include="sources\Core\System\Time.cpp" />
+    <ClCompile Include="sources\ECS\Camera.cpp" />
     <ClCompile Include="sources\ECS\Component.cpp" />
     <ClCompile Include="sources\ECS\Model.cpp" />
     <ClCompile Include="sources\ECS\ScriptInstance.cpp" />
@@ -326,11 +328,13 @@
     <ClInclude Include="includes\Core\GameObject.h" />
     <ClInclude Include="includes\Core\GameObjectsManager.h" />
     <ClInclude Include="includes\Core\System\Application.h" />
+    <ClInclude Include="includes\Core\System\CameraManager.h" />
     <ClInclude Include="includes\Core\System\Input.h" />
     <ClInclude Include="includes\Core\System\Random.h" />
     <ClInclude Include="includes\Core\System\ThreadPool.h" />
     <ClInclude Include="includes\Core\System\Time.h" />
     <ClInclude Include="includes\define.h" />
+    <ClInclude Include="includes\ECS\Camera.h" />
     <ClInclude Include="includes\ECS\Component.h" />
     <ClInclude Include="includes\ECS\Model.h" />
     <ClInclude Include="includes\ECS\ScriptInstance.h" />
@@ -341,6 +345,7 @@
     <ClInclude Include="includes\maths\Vec2.hpp" />
     <ClInclude Include="includes\maths\Vec3.hpp" />
     <ClInclude Include="includes\maths\Vec4.hpp" />
+    <ClInclude Include="includes\Ressources\Material.h" />
     <ClInclude Include="includes\Ressources\Mesh.h" />
     <ClInclude Include="includes\Ressources\Ressource.h" />
     <ClInclude Include="includes\Ressources\RessourcesManager.h" />

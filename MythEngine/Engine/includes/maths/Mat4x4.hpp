@@ -46,13 +46,6 @@ public:
                            Vec3 const& p_to,
                            Vec3 const& p_up = Vec3::Up);
 
-    static Mat4x4   Ortho(float const        p_left,
-                          float const        p_right,
-                          float const        p_bottom,
-                          float const        p_top,
-                          float const        p_near,
-                          float const        p_far);
-
     static Mat4x4   Perspective(float const        p_fov,
                                 float const        p_aspect,
                                 float const        p_near,
@@ -64,11 +57,29 @@ public:
                                 float const        p_near,
                                 float const        p_far);
 
+    static Mat4x4   Orthographique(float const        p_fov,
+                                   float const        p_aspect,
+                                   float const        p_near,
+                                   float const        p_far);
+
+    static Mat4x4   Orthographique(float const        p_fov,
+                                   float const        p_width,
+                                   float const        p_height,
+                                   float const        p_near,
+                                   float const        p_far);
+
     static Mat4x4   ViewDeg(float pitch, float yaw, Vec3 pos);
 
     static Mat4x4   ViewRad(float pitch, float yaw, Vec3 pos);
 
     static Mat4x4   Frustum(float l, float r, float t, float b, float n, float f);
+
+    static Mat4x4   Ortho(float const        p_left,
+        float const        p_right,
+        float const        p_bottom,
+        float const        p_top,
+        float const        p_near,
+        float const        p_far);
 
     void            PrintMat();
 

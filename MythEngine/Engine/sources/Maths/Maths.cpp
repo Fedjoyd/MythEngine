@@ -225,3 +225,8 @@ float Maths::TanH (float const p_value)
 {
     return tanhf(p_value);
 }
+
+float Maths::Mod(float Value, float Base)
+{
+    return fmod(Value, Base);
+}

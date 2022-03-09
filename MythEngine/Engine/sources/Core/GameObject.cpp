@@ -82,7 +82,6 @@ void Core::GameObject::ShowEditorControl()
 		if (ImGui::Button(("Delete##Component_" + std::to_string(i)).c_str()))
 			m_components[i]->SetDeleteFlag(true);
 
-		ImGui::Spacing();
 		m_components[i]->ShowEditorControl(i);
 		ImGui::Separator();
 	}

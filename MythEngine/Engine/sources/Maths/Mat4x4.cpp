@@ -109,30 +109,11 @@ Mat4x4      Mat4x4::LookAt(Vec3 const& p_from,
     return lookAt;
 }
 
-Mat4x4      Mat4x4::Ortho(float const        p_left,
-                       float const        p_right,
-                       float const        p_bottom,
-                       float const        p_top,
-                       float const        p_near,
-                       float const        p_far)
-{
-    Mat4x4 ortho
-    (
-        2/(p_right - p_left)                , 0                                 , 0                                   , -(p_right + p_left) / (p_right - p_left),
-        0                                   , 2/(p_top-p_bottom)                , 0                                   , -(p_top + p_bottom) / (p_top - p_bottom),
-        0                                   , 0                                 , -2/(p_far- p_near)                  , -(p_far + p_near) / (p_far - p_near),
-        0                                   , 0                                 , 0                                   , 1
-    );
-    return ortho;
-}
-
-
 Mat4x4      Mat4x4::Perspective(float const        p_fov,
-                             float const        p_aspect,
-                             float const        p_near,
-                             float const        p_far)
+                                float const        p_aspect,
+                                float const        p_near,
+                                float const        p_far)
 {
-    
     float top = p_near * tan(p_fov / 2.f);
     float right = top * p_aspect;
     return Frustum(-right, right, -top, top, p_near, p_far);
@@ -148,6 +129,28 @@ Mat4x4      Mat4x4::Perspective(float const        p_fov,
     float top = p_near * tan(p_fov / 2.f);
     float right = top * p_aspect;
     return Frustum(-right, right, -top, top, p_near, p_far);
+}
+
+Mat4x4 Mat4x4::Orthographique(float const p_fov,
+                              float const p_aspect,
+                              float const p_near,
+                              float const p_far)
+{
+    float top = p_near * tan(p_fov / 2.f);
+    float right = top * p_aspect;
+    return Ortho(-right, right, -top, top, p_near, p_far);
+}
+
+Mat4x4 Mat4x4::Orthographique(float const p_fov,
+                              float const p_width,
+                              float const p_height,
+                              float const p_near,
+                              float const p_far)
+{
+    float p_aspect = p_width / p_height;
+    float top = p_near * tan(p_fov / 2.f);
+    float right = top * p_aspect;
+    return Ortho(-right, right, -top, top, p_near, p_far);
 }
 
 
@@ -171,6 +174,23 @@ Mat4x4      Mat4x4::Frustum(float l, float r, float b, float t, float n, float f
         0.f                , 0.f                , (-2.f * f * n) / (f - n), 0.f
     );
     return frustum;
+}
+
+Mat4x4      Mat4x4::Ortho(float const        p_left,
+                          float const        p_right,
+                          float const        p_bottom,
+                          float const        p_top,
+                          float const        p_near,
+                          float const        p_far)
+{
+    Mat4x4 ortho
+    (
+        2 / (p_right - p_left), 0, 0, -(p_right + p_left) / (p_right - p_left),
+        0, 2 / (p_top - p_bottom), 0, -(p_top + p_bottom) / (p_top - p_bottom),
+        0, 0, -2 / (p_far - p_near), -(p_far + p_near) / (p_far - p_near),
+        0, 0, 0, 1
+    );
+    return ortho;
 }
 
 void        Mat4x4::PrintMat()

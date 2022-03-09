@@ -10,7 +10,6 @@
 #include "Core/System/ThreadPool.h"
 #include "Ressources/RessourcesManager.h"
 #include "Core/GameObjectsManager.h"
-#include "Core/System/Input.h"
 
 #include "Core/Debug/Log.h"
 #define MYTH_CURRENT_FILE "Application.cpp"
@@ -68,6 +67,8 @@ namespace Core
 			std::string m_nextSceneName;
 
 #ifdef MODE_EDITOR
+			bool m_editorOpen = true;
+
 			bool m_demoImGuiWindow = false;
 			bool m_settingsWindow = true;
 			bool m_consoleWindow = true;
